@@ -14,10 +14,9 @@ builder.Services.AddTransient<IAlternateKeyRepository, AlternateKeyRepositoryInM
 // ODataOptions.cs
 // HttpRequestExtensions.cs
 
-// Not work
-// Modify the global scope didn't affect the odata scope... idea why design like this
+// global scope service
+// NOTE: It seems that modify global scope service didn't affect the odata?
 // Please look at the source code in the source code at ODataOptions.cs
-// routeServiceProvider.CreateAsyncScope
 // builder.Services.AddSingleton<IODataSerializerProvider, IngoreNullEntityPropertiesSerializerProvider>();
 
 builder.Services.AddControllers()
@@ -27,7 +26,7 @@ builder.Services.AddControllers()
             var odataOptions = opt.EnableQueryFeatures()
                 .AddRouteComponents("odata", EdmModelBuilder.GetEdmModel(), (services) =>
                 {
-                    // this service is for odata scope only ... no idea why
+                    // this service is for odata scope only ... 
                     // by looking at the source code at ODataOptions.cs
                     services.AddSingleton<IODataSerializerProvider, IngoreNullEntityPropertiesSerializerProvider>();
                 });
@@ -35,6 +34,8 @@ builder.Services.AddControllers()
             // var routeServiceProvider = odataOptions.GetRouteServices("odata");
             //var serializerProvider = routeServiceProvider.GetRequiredService<IODataSerializerProvider>();
         });
+
+builder.Services.AddTransient<IAlternateKeyRepository, AlternateKeyRepositoryInMemory>();
 
 var app = builder.Build();
 
