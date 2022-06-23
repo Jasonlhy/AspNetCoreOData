@@ -40,7 +40,7 @@ namespace ODataAlternateKeySample.Models
             {
                 Id = e,
                 // Name = string.Format("Order-{0}", e),
-                Name = null,
+                Name = (e % 2) == 0 ? null : string.Format("Order-{0}", e),
                 Token = tokes[e - 1],
                 Amount = 10 * (e + 1) - e,
                 Price = 8 * e
